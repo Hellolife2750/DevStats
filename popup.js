@@ -65,6 +65,10 @@ getValue("dev_stats_last_clear", function (date) {
     lastClear.querySelector(".date").innerText = date;
 });
 
+document.getElementById("open-full").addEventListener("click", function () {
+    chrome.tabs.create({ url: "index.html" });
+});
+
 
 
 
