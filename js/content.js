@@ -25,8 +25,6 @@ function increment(url) {
         localStorage.setItem(url, parseInt(oldValue) + 1)
     }
 
-    localStorage.setItem("grosconnard", "test")
-
     chrome.storage.local.get(url, function (items) {
         let oldValue = items[url];
         if (oldValue == null) {
@@ -74,7 +72,7 @@ function increment(url) {
     console.log(keysWithTestValue);*/
 }
 
-window.addEventListener("load", function () {
+/*window.addEventListener("load", function () {
     var img = document.createElement("img");
     img.src = chrome.runtime.getURL("icon.png");
     img.style.position = "absolute";
@@ -85,7 +83,7 @@ window.addEventListener("load", function () {
     img.style.zIndex = "1000";
 
     document.body.appendChild(img);
-});
+});*/
 
 
 

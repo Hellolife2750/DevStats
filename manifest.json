@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "DevStats",
-    "version": "0.1",
+    "version": "0.2",
     "description": "Permet de générer des statistiques pour les développeurs à partir des sites visités.",
     "permissions": [
         "activeTab",
@@ -10,13 +10,13 @@
         "storage"
     ],
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "html/popup.html"
     },
     "icons": {
-        "128": "icon.png"
+        "128": "res/icon.png"
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "js/background.js"
     },
     "content_scripts": [
         {
@@ -26,14 +26,14 @@
                 "https://openclassrooms.com/*"
             ],
             "js": [
-                "content.js"
+                "js/content.js"
             ]
         }
     ],
     "web_accessible_resources": [
         {
             "resources": [
-                "icon.png"
+                "res/icon.png"
             ],
             "matches": [
                 "https://chat.openai.com/*",

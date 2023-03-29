@@ -66,7 +66,7 @@ getValue("dev_stats_last_clear", function (date) {
 });
 
 document.getElementById("open-full").addEventListener("click", function () {
-    chrome.tabs.create({ url: "index.html" });
+    chrome.tabs.create({ url: "../html/index.html" });
 });
 
 
