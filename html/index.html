@@ -25,7 +25,34 @@
 
 <body>
     <main>
-        <h1>DevStats Tableau de bord</h1>
+        <div id="title-container">
+            <h1>DevStats</h1>
+            <p>tableau de bord</p>
+        </div>
+
+        <section id="add-site-section">
+            <h2 class="section-title">Ajouter un site</h2>
+            <div class="input-container">
+                <input type="text" id="input" required="" autocomplete="off">
+                <label for="input" class="label">Add new site</label>
+                <div class="underline"></div>
+            </div>
+        </section>
+
+        <section id="graph-section">
+            <h2 class="section-title">Graphe</h2>
+            <button class="classic-button">Download</button>
+        </section>
+
+        <section id="stats-section">
+            <div class="inline">
+                <h2 class="section-title">Statistiques</h2>
+                <button class="classic-button">Reset</button>
+            </div>
+
+            <button class="classic-button">Download</button>
+        </section>
+
     </main>
 
     <script src="../js/index.js"></script>

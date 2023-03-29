@@ -10,6 +10,14 @@ clearData.addEventListener('click', () => {
     chrome.storage.local.remove("stackoverflow.com");
     chrome.storage.local.remove("chat.openai.com");*/
 
+    if (confirm("Supprimer les données ?")) {
+        clearDatas();
+    }
+
+    //alert(localStorage.getItem('openclassrooms.com'))
+});
+
+function clearDatas() {
     chrome.storage.local.set({ ["openclassrooms.com"]: 0 });
     chrome.storage.local.set({ ["stackoverflow.com"]: 0 });
     chrome.storage.local.set({ ["chat.openai.com"]: 0 });
@@ -17,8 +25,7 @@ clearData.addEventListener('click', () => {
     updateVisitedUl();
     lastClear.querySelector(".date").innerText = getDate();
     chrome.storage.local.set({ ["dev_stats_last_clear"]: getDate() });
-    //alert(localStorage.getItem('openclassrooms.com'))
-});
+}
 
 function getDate() {
     const date = new Date();
