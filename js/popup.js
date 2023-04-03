@@ -16,17 +16,54 @@ clearData.addEventListener('click', () => {
 
     if (confirm("Supprimer les données ?")) {
         //clearDatas();
-        removeDAT_PATH();
+        resetData();
     }
 
     //alert(localStorage.getItem('openclassrooms.com'))
 });
+
+function resetData() {
+    removeDAT_PATH();
+    initialize();
+}
+
+//vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
+function initialize() {
+    chrome.storage.local.get(DAT_PATH, function (result) {
+        if (Object.keys(result).length === 0) {
+            createDatas();
+        }
+    });
+}
+
+//crée et initialise le variable de stockage dans le cache
+function createDatas() {
+    let defaults = ["openclassrooms.com", "chat.openai.com", "stackoverflow.com"];
+    let data = {};
+    defaults.forEach(dfUrl => {
+        data[dfUrl] = getDefaultValues();
+    });
+    chrome.storage.local.set({ [DAT_PATH]: data });
+}
+
+//valeurs par défaut à l'ajout d'une nouvelle clé (url) dans le cache
+function getDefaultValues() {
+    return { "elapsed": 0, "counter": 0, "date": "--" };
+}
+
+//détruit la variable de stockage de l'application (hard reset)
+function removeDAT_PATH() {
+    chrome.storage.local.remove(DAT_PATH, function () {
+        updatePopup();
+    });
+}
 
 //fonction qui renvoie un tableau par ordre croissant des sites (clés) qui ont été le plus visités (stockés dans la cache)
 function getOrderedKeys() {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(DAT_PATH, function (result) {
             const data = result[DAT_PATH];
+            if (typeof data === "undefined" || data === null) return;
             const keys = Object.keys(data);
 
             keys.sort((a, b) => {
@@ -39,6 +76,24 @@ function getOrderedKeys() {
         });
     });
 }
+
+
+/*function getAKey() {
+    return new Promise((resolve) => {
+        chrome.storage.local.get(DAT_PATH["stackoverflow.com"], function (result) {
+            resolve(result);
+        });
+    });
+}
+
+
+async function alertTab() {
+    let monRes = await getAKey();
+    console.log(monRes)
+}
+
+alertTab();*/
+
 
 
 /*function updatePopup() {
@@ -76,7 +131,7 @@ function getOrderedKeys() {
                 });
             });
         });
-
+ 
         Promise.all(promises).then(counters => {
             const [first, second, third] = counters;
             const values = [first, second, third];
@@ -110,14 +165,7 @@ function updatePopup() {
     });
 }
 
-//détruit la variable de stockage de l'application (hard reset)
-function removeDAT_PATH() {
-    chrome.storage.local.remove(DAT_PATH, function () {
-        updatePopup();
-    });
-}
-
-
+initialize();
 updatePopup();
 
 function clearDatas() {
@@ -193,16 +241,16 @@ chrome.extension.getBackgroundPage().chrome.tabs.getSelected(null,
     });*/
 
 /*const keysWithTestValue = [];
-
+ 
 for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     const value = localStorage.getItem(key);
-
+ 
     if (value === 'test') {
         keysWithTestValue.push(key);
     }
 }
-
+ 
 console.log(keysWithTestValue);
 alert(keysWithTestValue.length)*/
 
