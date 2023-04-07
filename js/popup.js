@@ -43,6 +43,7 @@ function createDatas() {
     defaults.forEach(dfUrl => {
         data[dfUrl] = getDefaultValues();
     });
+    data["Internal_last_clear_date"] = getDate();
     chrome.storage.local.set({ [DAT_PATH]: data });
 }
 
@@ -66,13 +67,15 @@ function getOrderedKeys() {
             if (typeof data === "undefined" || data === null) return;
             const keys = Object.keys(data);
 
-            keys.sort((a, b) => {
+            const filteredKeys = keys.filter(key => !key.startsWith("Internal_"));
+
+            filteredKeys.sort((a, b) => {
                 const counterA = data[a].counter;
                 const counterB = data[b].counter;
                 return counterB - counterA;
             });
 
-            resolve(keys);
+            resolve(filteredKeys);
         });
     });
 }
@@ -219,8 +222,13 @@ function updateVisitedUl() {
 
 //updateVisitedUl();
 
-getValue("dev_stats_last_clear", function (date) {
+/*getValue("dev_stats_last_clear", function (date) {
     lastClear.querySelector(".date").innerText = date;
+});*/
+
+chrome.storage.local.get(DAT_PATH, function (data) {
+    lastClear.querySelector(".date").innerText = data.dev_stats_datas.Internal_last_clear_date;
+    //alert(devStatsLastClear);
 });
 
 document.getElementById("open-full").addEventListener("click", function () {
