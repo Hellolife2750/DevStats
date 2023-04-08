@@ -236,6 +236,55 @@ dlCsvBtn.addEventListener('click', () => {
 })
 
 
+const resetButton = document.getElementById('reset-button');
+
+resetButton.addEventListener('click', () => {
+    resetData();
+});
+
+function resetData() {
+    removeDAT_PATH();
+    initialize();
+    //location.reload();
+}
+
+//vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
+function initialize() {
+    chrome.storage.local.get(DAT_PATH, function (result) {
+        if (Object.keys(result).length === 0) {
+            createDatas();
+        }
+    });
+}
+
+//crée et initialise le variable de stockage dans le cache
+function createDatas() {
+    let defaults = ["openclassrooms.com", "chat.openai.com", "stackoverflow.com"];
+    let data = {};
+    defaults.forEach(dfUrl => {
+        data[dfUrl] = getDefaultValues();
+    });
+    data["Internal_last_clear_date"] = getDate();
+    chrome.storage.local.set({ [DAT_PATH]: data }, function () {
+        location.reload();
+    });
+}
+
+
+//détruit la variable de stockage de l'application (hard reset)
+function removeDAT_PATH() {
+    chrome.storage.local.remove(DAT_PATH);
+}
+
+function getDate() {
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return day + '/' + month + '/' + year;
+}
+
+
 
 
 
