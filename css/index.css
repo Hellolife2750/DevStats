@@ -38,6 +38,8 @@ main {
   justify-content: center;
   align-items: flex-start;
   padding: 5%;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 /*titre*/
@@ -191,4 +193,27 @@ main > section {
 
 #added-popup .website-url {
   font-weight: bold;
+}
+
+#stats-section {
+  width: 100%;
+}
+
+#stats-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+#stats-table th {
+  width: 25%;
+}
+
+#stats-table th,
+#stats-table td {
+  border: 2px solid black;
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: center;
 }
