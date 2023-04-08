@@ -69,8 +69,14 @@ main > section {
 /*customized input*/
 .input-container {
   position: relative;
-  margin: 50px auto;
+  margin-top: 40px;
   width: 200px;
+}
+
+#add-site-button {
+  font-size: 0.7em;
+  margin-bottom: 0em;
+  margin-top: 1em;
 }
 
 .input-container input[type="text"] {
@@ -113,6 +119,30 @@ main > section {
 .input-container input[type="text"]:focus ~ .underline,
 .input-container input[type="text"]:valid ~ .underline {
   transform: scaleX(1);
+}
+
+#site-list-container {
+  position: relative;
+  display: none;
+  /*opacity: 0;*/
+}
+
+#site-list {
+  position: absolute;
+  background-color: whitesmoke;
+  z-index: 1;
+  padding: 0.8rem;
+  border-radius: 0 10px 10px 0;
+  width: auto;
+}
+
+#site-list > * {
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+}
+
+#add-site-section {
+  width: 100%;
 }
 
 /*customized button*/

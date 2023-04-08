@@ -17,6 +17,7 @@ clearData.addEventListener('click', () => {
     if (confirm("Supprimer les données ?")) {
         //clearDatas();
         resetData();
+        window.close();
     }
 
     //alert(localStorage.getItem('openclassrooms.com'))
@@ -153,7 +154,7 @@ function updatePopup() {
         chrome.storage.local.get(DAT_PATH, function (result) {
             const data = result[DAT_PATH];
             const visitedUl = document.getElementById("visited-ul");
-            for (let i = 0; i < keys.length; i++) {
+            for (let i = 0; i < 3; i++) { //keys.length
                 const key = keys[i];
                 const urlData = data[key];
                 const counter = urlData.counter;
@@ -162,11 +163,33 @@ function updatePopup() {
 
                 // update the image of the site
                 const iconImg = visitedUl.children[i].querySelector('.tiny-icon');
-                iconImg.src = "../res/icons/" + key + ".png";
+                var iconUrl = "../res/icons/" + key + ".png";
+                checkFileExists(iconUrl).then(newUrl => {
+                    iconImg.src = newUrl;
+                });
+
+                //update title on mouseover
+                iconImg.title = key;
             }
         });
     });
 }
+
+function checkFileExists(fileUrl) {
+    return new Promise(resolve => {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', fileUrl);
+        http.onreadystatechange = function () {
+            if (this.readyState == this.DONE && this.status != 404) {
+                resolve("../res/icons/unknown.png");
+            } else {
+                resolve(fileUrl);
+            }
+        };
+        http.send();
+    });
+}
+
 
 initialize();
 updatePopup();

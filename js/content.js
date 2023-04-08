@@ -41,6 +41,7 @@ function createDatas() {
     defaults.forEach(dfUrl => {
         data[dfUrl] = getDefaultValues();
     });
+    data["Internal_last_clear_date"] = getDate();
     chrome.storage.local.set({ [DAT_PATH]: data });
 }
 
@@ -66,8 +67,13 @@ chrome.storage.local.get(DAT_PATH, function (items) {
 
 //ajoute 1 au compteur d'un site, s'il est présent dans le cache
 function incrementIfExists() {
+    /*chrome.storage.local.get(DAT_PATH, function (data) {
+        console.log(data);
+    })*/
+    console.log(location.hostname)
     chrome.storage.local.get(DAT_PATH, function (result) {
         if (result[DAT_PATH] && result[DAT_PATH][location.hostname]) {
+            console.log(location.hostname)
             const data = result[DAT_PATH];
             const urlData = data[location.hostname];
             const updatedUrlData = {
