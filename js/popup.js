@@ -7,21 +7,40 @@ const DAT_PATH = "dev_stats_datas";
 const clearData = document.getElementById('clear-data');
 const visitedUl = document.getElementById("visited-ul");
 const lastClear = document.getElementById("last-clear");
+const body = document.body;
+const doubleCheck = document.getElementById('double-check')
 
 clearData.addEventListener('click', () => {
+    if (doubleCheck.style.display == "block") {
+        resetData();
+        window.close();
+    } else {
+        doubleCheckReset();
+    }
+
     //localStorage.removeItem();
     /*chrome.storage.local.remove("openclassrooms.com");
     chrome.storage.local.remove("stackoverflow.com");
     chrome.storage.local.remove("chat.openai.com");*/
 
-    if (confirm("Supprimer les données ?")) {
+    /*if (confirm("Supprimer les données ?")) {
         //clearDatas();
         resetData();
         window.close();
-    }
+    }*/
 
     //alert(localStorage.getItem('openclassrooms.com'))
 });
+
+async function doubleCheckReset() {
+    doubleCheck.style.display = "block";
+    await sleep(3000);
+    doubleCheck.style.display = "none";
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function resetData() {
     removeDAT_PATH();

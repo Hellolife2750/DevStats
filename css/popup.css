@@ -54,3 +54,9 @@ body {
   justify-content: space-around;
   margin-bottom: 5px;
 }
+
+#double-check {
+  color: rgb(221, 21, 21);
+  margin-bottom: 0;
+  display: none;
+}
