@@ -3,9 +3,11 @@
 //chemin de stockage des données de l'extension
 const DAT_PATH = "dev_stats_datas";
 
+//sites disponibles dans la liste de recherche
 const disponibleSites = ["openclassrooms.com", "stackoverflow.com", "chat.openai.com", "github.com", "gitlab.com", "developer.mozilla.org", "www.udemy.com", "sourceforge.net", "codepen.io"
-    , "uiverse.io", "developpez.com", "codes-sources.commentcamarche.net"];
+    , "uiverse.io", "developpez.com", "codes-sources.commentcamarche.net", "itch.io"];
 
+// faire apparaitre le menu déroulant quand on cherche un site
 function searchSites(input) {
     const siteListDiv = document.getElementById('site-list');
     siteListDiv.innerHTML = '';
@@ -59,10 +61,15 @@ siteInput.addEventListener("keyup", () => {
 
 siteInput.addEventListener('blur', async function () {
     await sleep(250)
+    /*siteListContainer.style.opacity = "1";
+    setTimeout(() => {
+        siteListContainer.style.opacity = "0";
+    }, 250);*/
     siteListContainer.style.display = "none";
     //siteListContainer.style.opacity = "0"
 })
 
+//appelé dans une fonciton asynchrone, permet de la mettre en pause
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -113,6 +120,7 @@ async function checkDomainExists(domain) {
 
 const addedPopup = document.getElementById("added-popup");
 
+//Fait apparaitre le message en haut du site quand una ction importante est effectuée
 function appearPopup(type, url) {
     if (type == "already-exist") {
         /*addedPopup.querySelector("p").textContent = "Website :  was already in the list.";
@@ -164,6 +172,7 @@ function getOrderedKeys() {
 
 var csvString = `Website,Visits,Last visit,Elapsed time`;
 
+//génère la tableau des données utilisateur
 function generateTable() {
     getOrderedKeys().then(keys => {
         chrome.storage.local.get(DAT_PATH, function (result) {
@@ -276,6 +285,7 @@ function removeDAT_PATH() {
     chrome.storage.local.remove(DAT_PATH);
 }
 
+//renvoie une string de la data au format jj/mm/aaaa
 function getDate() {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, '0');

@@ -223,6 +223,7 @@ function clearDatas() {
     chrome.storage.local.set({ ["dev_stats_last_clear"]: getDate() });
 }
 
+//renvoie une string de la data au format jj/mm/aaaa
 function getDate() {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, '0');
