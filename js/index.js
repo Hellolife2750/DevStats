@@ -122,16 +122,39 @@ const addedPopup = document.getElementById("added-popup");
 
 //Fait apparaitre le message en haut du site quand una ction importante est effectuée
 function appearPopup(type, url) {
-    if (type == "already-exist") {
-        /*addedPopup.querySelector("p").textContent = "Website :  was already in the list.";
-        addedPopup.querySelector(".website-url").textContent = url;*/
+    /*if (type == "already-exist") {
         addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
         addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was already in the list.`;
     } else if (type == "added") {
-        /*addedPopup.querySelector("p").textContent = "Website :  was successfully added to the list.";
-        addedPopup.querySelector(".website-url").textContent = url;*/
         addedPopup.style.backgroundColor = "rgb(38, 180, 133)";
         addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was successfully added to the list.`;
+    } else if (type == "resetAll") {
+        addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
+        addedPopup.querySelector('p').innerText = "All extension data has been successfully reset.";
+    } else if (type == "reset") {
+        addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
+        addedPopup.querySelector('p').innerText = "All counters have been successfully reset to 0.";
+    }*/
+
+    switch (type) {
+        case "already-exist":
+            addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
+            addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was already in the list.`;
+            break;
+        case "added":
+            addedPopup.style.backgroundColor = "rgb(38, 180, 133)";
+            addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was successfully added to the list.`;
+            break;
+        case "resetAll":
+            addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
+            addedPopup.querySelector('p').innerText = "All extension data has been successfully reset.";
+            break;
+        case "reset":
+            addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
+            addedPopup.querySelector('p').innerText = "All counters have been successfully reset to 0.";
+            break;
+        default:
+            return;
     }
 
     addedPopup.style.display = "block";
@@ -245,13 +268,32 @@ dlCsvBtn.addEventListener('click', () => {
 })
 
 
+const resetAllButton = document.getElementById('reset-all-button');
 const resetButton = document.getElementById('reset-button');
+
+resetAllButton.addEventListener('click', () => {
+    resetAllData();
+});
 
 resetButton.addEventListener('click', () => {
     resetData();
 });
 
 function resetData() {
+    chrome.storage.local.get(DAT_PATH, function (result) {
+        const devStatsData = result[DAT_PATH];
+        for (const key in devStatsData) {
+            devStatsData[key] = getDefaultValues();
+        }
+        devStatsData["Internal_last_clear_date"] = getDate();
+        chrome.storage.local.set({ [DAT_PATH]: devStatsData }, function () {
+            location.reload();
+        });
+    });
+}
+
+
+function resetAllData() {
     removeDAT_PATH();
     initialize();
     //location.reload();

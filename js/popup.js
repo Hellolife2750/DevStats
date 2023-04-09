@@ -43,9 +43,22 @@ function sleep(ms) {
 }
 
 function resetData() {
+    chrome.storage.local.get(DAT_PATH, function (result) {
+        const devStatsData = result[DAT_PATH];
+        for (const key in devStatsData) {
+            devStatsData[key] = getDefaultValues();
+        }
+        devStatsData["Internal_last_clear_date"] = getDate();
+        chrome.storage.local.set({ [DAT_PATH]: devStatsData }, function () {
+            location.reload();
+        });
+    });
+}
+
+/*function resetData() {
     removeDAT_PATH();
     initialize();
-}
+}*/
 
 //vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
 function initialize() {
