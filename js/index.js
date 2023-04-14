@@ -215,7 +215,7 @@ function generateTable() {
                     <td>${key}</td>
                     <td>${urlData.counter}</td>
                     <td>${urlData.date}</td>
-                    <td>${urlData.elapsed}</td>
+                    <td>${formatSeconds(urlData.elapsed)}</td>
                 </tr>
                 `;
 
@@ -227,6 +227,28 @@ function generateTable() {
         });
     });
 }
+
+//transforme des secondes au format hh:mm:ss
+function formatSeconds(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
+    const seconds = totalSeconds - hours * 3600 - minutes * 60;
+
+    let result = '';
+    if (hours > 0) {
+        result += hours + 'h';
+    }
+    if (minutes > 0) {
+        result += ' ' + minutes + 'm';
+    }
+    if (seconds > 0 || result === '') {
+        result += ' ' + seconds + 's';
+    }
+
+    return result.trim();
+}
+
+
 
 generateTable();
 /*document.addEventListener('click', () => {
@@ -370,9 +392,3 @@ function removeSite(rmBtn) {
     });
 
 }
-
-
-
-
-
-

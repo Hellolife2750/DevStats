@@ -24,6 +24,7 @@ initialize();*/
 
 //chemin de stockage des données de l'extension
 const DAT_PATH = "dev_stats_datas";
+const elapsedTimeStep = 30;
 
 //vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
 function initialize() {
@@ -250,5 +251,31 @@ localStorage.removeItem('maCle');
 
 // Vider tout le localStorage
 localStorage.clear();*/
+
+//incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
+/*setInterval(function () {
+    chrome.storage.local.get(DAT_PATH, function (items) {
+        if (items[DAT_PATH][location.hostname] != null) {
+            items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
+            chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+        }
+    });
+}, elapsedTimeStep * 1000);*/
+setInterval(function () {
+    if (chrome && chrome.runtime && chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        return;
+    }
+
+    chrome.storage.local.get(DAT_PATH, function (items) {
+        if (items[DAT_PATH][location.hostname] != null) {
+            items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
+            chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+        }
+    });
+}, elapsedTimeStep * 1000);
+
+
+
 
 
