@@ -366,8 +366,7 @@ function removeSite(rmBtn) {
 
     chrome.storage.local.get(DAT_PATH, function (items) {
         delete items[DAT_PATH][url];
-        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-        location.reload();
+        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] }, location.reload());
     });
 
 }
