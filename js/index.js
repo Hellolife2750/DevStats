@@ -211,6 +211,7 @@ function generateTable() {
 
                 const tableCode = `
                 <tr>
+                    <td><div class="remove-site-btn">-</div></td>
                     <td>${key}</td>
                     <td>${urlData.counter}</td>
                     <td>${urlData.date}</td>
@@ -222,6 +223,7 @@ function generateTable() {
 
                 csvString += `\n${key},${urlData.counter},${urlData.date},${urlData.elapsed}`;
             }
+            setupRemoveSiteBtns();
         });
     });
 }
@@ -334,6 +336,40 @@ function getDate() {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return day + '/' + month + '/' + year;
+}
+
+/*updater le last reset*/
+const lastReset = document.getElementById('last-reset');
+
+function updateLastReset() {
+    chrome.storage.local.get(DAT_PATH, function (data) {
+        lastReset.innerText = "Depuis le " + data[DAT_PATH]['Internal_last_clear_date'];
+    });
+}
+
+/*retirer un site un par un*/
+async function setupRemoveSiteBtns() {
+    const removeSiteBtns = document.querySelectorAll('.remove-site-btn');
+
+    removeSiteBtns.forEach(rmBtn => {
+        rmBtn.addEventListener("click", () => {
+            removeSite(rmBtn);
+        });
+    });
+}
+setupRemoveSiteBtns();
+
+
+function removeSite(rmBtn) {
+    const url = rmBtn.parentNode.parentNode.children[1].innerText;
+    console.log(url)
+
+    chrome.storage.local.get(DAT_PATH, function (items) {
+        delete items[DAT_PATH][url];
+        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+        location.reload();
+    });
+
 }
 
 
