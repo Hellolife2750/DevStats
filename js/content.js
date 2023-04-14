@@ -268,10 +268,9 @@ setInterval(function () {
     }
 
     chrome.storage.local.get(DAT_PATH, function (items) {
-        if (items[DAT_PATH][location.hostname] != null) {
-            items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
-            chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-        }
+        if (items[DAT_PATH][location.hostname] == null) return;
+        items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
+        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
     });
 }, elapsedTimeStep * 1000);
 
