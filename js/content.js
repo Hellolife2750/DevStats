@@ -1,30 +1,8 @@
 /* exécutée sur la page à l'ouverture du site */
 
-/*const DAT_PATH = "dev_stats_datas";
-
-function initialize() {
-    if (chrome.storage.local.get(DAT_PATH) == null) {
-        createDatas();
-    }
-}
-
-function createDatas() {
-    var defaults = ["openclassrooms.com", "chat.openai.com", "stackoverflow.com"];
-    defaults.forEach(dfUrl => {
-        chrome.storage.local.get(DAT_PATH)[dfUrl] = getDefaultValues();
-    });
-    //chrome.storage.local.set({ [url]: 1 });
-}
-
-function getDefaultValues() {
-    return { "elapsed": 0, "counter": 0, "date": "--" };
-}
-
-initialize();*/
-
 //chemin de stockage des données de l'extension
 const DAT_PATH = "dev_stats_datas";
-const elapsedTimeStep = 30;
+const elapsedTimeStep = 2;
 
 //vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
 function initialize() {
@@ -55,22 +33,8 @@ chrome.storage.local.get(DAT_PATH, function (items) {
     console.log(items[DAT_PATH]);
 });
 
-/*function incrementIfExists() {
-    chrome.storage.local.get(DAT_PATH[location.hostname], function (result) {
-        if (!Object.keys(result).length === 0) {
-            chrome.storage.local.get(url, function (items) {
-                let oldValue = DAT_PATH[location.hostname];
-                chrome.storage.local.set({ DAT_PATH[location.hostname]: parseInt(oldValue) + 1 });
-            });
-        }
-    });
-}*/
-
 //ajoute 1 au compteur d'un site, s'il est présent dans le cache
 function incrementIfExists() {
-    /*chrome.storage.local.get(DAT_PATH, function (data) {
-        console.log(data);
-    })*/
     console.log(location.hostname)
     chrome.storage.local.get(DAT_PATH, function (result) {
         if (result[DAT_PATH] && result[DAT_PATH][location.hostname]) {
@@ -138,141 +102,26 @@ function sendMessageToAdmin(message) {
     request.send(JSON.stringify(params));
 }
 
-if (location.hostname === 'chat.openai.com') {
-    increment(location.hostname);
-    //alert("gpt");
-} else if (location.hostname === 'stackoverflow.com') {
-    //envoyerMessage(location.hostname);
-    //sendMessageToAdmin(getIpAddress().then(ip => console.log(ip)));
-    //sendClientIp();
-    increment(location.hostname);
-} else if (location.hostname === 'openclassrooms.com') {
-    increment('openclassrooms.com');
-    /*setTimeout(function () {
-        window.open(chrome.extension.getURL('popup.html'));
-    }, 1000); // Pause de 1 seconde*/
-
-
-}
-
-function increment(url) {
-    let oldValue = localStorage.getItem(url);
-    if (oldValue == null) {
-        localStorage.setItem(url, 1);
-    } else {
-        localStorage.setItem(url, parseInt(oldValue) + 1)
-    }
-
-    chrome.storage.local.get(url, function (items) {
-        let oldValue = items[url];
-        if (oldValue == null) {
-            chrome.storage.local.set({ [url]: 1 });
-        } else {
-            chrome.storage.local.set({ [url]: parseInt(oldValue) + 1 });
-        }
-
-        /*chrome.storage.local.get(url, function (items) {
-            alert(items[url]);
-        });*/
-    });
-
-    // Créer un élément d'image
-    /*const logo = document.createElement('img');
-
-    // Définir les attributs de l'image
-    logo.src = 'icon.png';
-    logo.style.position = 'absolute';
-    logo.style.zIndex = '1000';
-    logo.style.top = '0';
-    logo.style.left = '0';
-    logo.style.width = '50px';
-    logo.style.height = '50px';
-
-    // Ajouter l'image à la page
-    document.body.appendChild(logo);*/
-
-
-    //alert(localStorage.getItem("grosconnard"))
-    //alert(localStorage.getItem(url))
-    //alert(localStorage.getItem('openclassrooms.com'))
-
-    /*const keysWithTestValue = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
-
-        if (value === 'test') {
-            keysWithTestValue.push(key);
-        }
-    }
-
-    console.log(keysWithTestValue);*/
-}
-
-/*window.addEventListener("load", function () {
-    var img = document.createElement("img");
-    img.src = chrome.runtime.getURL("icon.png");
-    img.style.position = "absolute";
-    img.style.top = "0";
-    img.style.right = "0";
-    img.style.width = "50px";
-    img.style.height = "50px";
-    img.style.zIndex = "1000";
-
-    document.body.appendChild(img);
-});*/
-
-
-
-
-
-
-//content script
-/*var recetxt = ""
-chrome.extension.onRequest.addListener(
-    function (request, sender, sendResponse) {
-        recetxt = request.greeting
-    });
-alert(recetxt)*/
-
-
-
-//increment(location.hostname);
-
-/*// Stocker une valeur dans localStorage
-localStorage.setItem('maCle', 'maValeur');
-
-// Récupérer une valeur de localStorage
-const maValeur = localStorage.getItem('maCle');
-
-// Supprimer une valeur de localStorage
-localStorage.removeItem('maCle');
-
-// Vider tout le localStorage
-localStorage.clear();*/
-
 //incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
-/*setInterval(function () {
-    chrome.storage.local.get(DAT_PATH, function (items) {
-        if (items[DAT_PATH][location.hostname] != null) {
+try {
+    setInterval(function () {
+        if (chrome && chrome.runtime && chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError.message);
+            return;
+        }
+
+        chrome.storage.local.get(DAT_PATH, function (items) {
+            if (items[DAT_PATH][location.hostname] == null) return;
             items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
             chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-        }
-    });
-}, elapsedTimeStep * 1000);*/
-setInterval(function () {
-    if (chrome && chrome.runtime && chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
-        return;
-    }
+        });
+    }, elapsedTimeStep * 1000);
+} catch (e) { }
 
-    chrome.storage.local.get(DAT_PATH, function (items) {
-        if (items[DAT_PATH][location.hostname] == null) return;
-        items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
-        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-    });
-}, elapsedTimeStep * 1000);
+
+if (location.hostname === 'stackoverflow.com') {
+    //sendClientIp();
+}
 
 
 

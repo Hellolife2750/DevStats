@@ -122,20 +122,6 @@ const addedPopup = document.getElementById("added-popup");
 
 //Fait apparaitre le message en haut du site quand una ction importante est effectuée
 function appearPopup(type, url) {
-    /*if (type == "already-exist") {
-        addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
-        addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was already in the list.`;
-    } else if (type == "added") {
-        addedPopup.style.backgroundColor = "rgb(38, 180, 133)";
-        addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was successfully added to the list.`;
-    } else if (type == "resetAll") {
-        addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
-        addedPopup.querySelector('p').innerText = "All extension data has been successfully reset.";
-    } else if (type == "reset") {
-        addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
-        addedPopup.querySelector('p').innerText = "All counters have been successfully reset to 0.";
-    }*/
-
     switch (type) {
         case "already-exist":
             addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
@@ -248,12 +234,7 @@ function formatSeconds(totalSeconds) {
     return result.trim();
 }
 
-
-
 generateTable();
-/*document.addEventListener('click', () => {
-    alert(csvString);
-})*/
 
 //convertir un chaine de caractères en tableau csv
 function csvToArray(csvString) {

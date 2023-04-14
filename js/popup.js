@@ -17,19 +17,6 @@ clearData.addEventListener('click', () => {
     } else {
         doubleCheckReset();
     }
-
-    //localStorage.removeItem();
-    /*chrome.storage.local.remove("openclassrooms.com");
-    chrome.storage.local.remove("stackoverflow.com");
-    chrome.storage.local.remove("chat.openai.com");*/
-
-    /*if (confirm("Supprimer les données ?")) {
-        //clearDatas();
-        resetData();
-        window.close();
-    }*/
-
-    //alert(localStorage.getItem('openclassrooms.com'))
 });
 
 async function doubleCheckReset() {
@@ -113,73 +100,6 @@ function getOrderedKeys() {
     });
 }
 
-
-/*function getAKey() {
-    return new Promise((resolve) => {
-        chrome.storage.local.get(DAT_PATH["stackoverflow.com"], function (result) {
-            resolve(result);
-        });
-    });
-}
-
-
-async function alertTab() {
-    let monRes = await getAKey();
-    console.log(monRes)
-}
-
-alertTab();*/
-
-
-
-/*function updatePopup() {
-    // Mettre à jour les valeurs de compteur dans le HTML
-    chrome.storage.local.get(DAT_PATH, function (result) {
-        const orderedKeys = getOrderedKeys(result[DAT_PATH]);
-
-        const visitedUl = document.getElementById("visited-ul");
-        for (let i = 0; i < orderedKeys.length; i++) {
-            const key = orderedKeys[i];
-            const urlData = result[DAT_PATH][key];
-            const counter = urlData.counter;
-
-            const liElement = visitedUl.getElementsByTagName("li")[i];
-            liElement.getElementsByTagName("span")[0].textContent = counter;
-        }
-    });
-}*/
-
-/*async function updatePopup() {
-    const orderedKeys = await getOrderedKeys();
-    const visitedUl = document.getElementById("visited-ul");
-    visitedUl.children[0].querySelector(".value").textContent = await getCounter(orderedKeys[0]);
-    visitedUl.children[1].querySelector(".value").textContent = await getCounter(orderedKeys[1]);
-    visitedUl.children[2].querySelector(".value").textContent = await getCounter(orderedKeys[2]);
-}*/
-
-/*function updatePopup() {
-    getOrderedKeys().then(keys => {
-        const promises = keys.slice(0, 3).map(key => {
-            return new Promise(resolve => {
-                chrome.storage.local.get(DAT_PATH, function (result) {
-                    const urlData = result[DAT_PATH][key];
-                    resolve(urlData.counter);
-                });
-            });
-        });
- 
-        Promise.all(promises).then(counters => {
-            const [first, second, third] = counters;
-            const values = [first, second, third];
-            const lis = document.querySelectorAll('#visited-ul li');
-            lis.forEach((li, index) => {
-                li.querySelector('.value').textContent = values[index];
-                li.querySelector('.tiny-icon').src = "../res/icons/" + urlSite + ".png";
-            });
-        });
-    });
-}*/
-
 //fonction qui met à jour le ul en triant par ordre décroissant les sites les plus visités
 function updatePopup() {
     getOrderedKeys().then(keys => {
@@ -245,16 +165,6 @@ function getDate() {
     return day + '/' + month + '/' + year;
 }
 
-/*let counter = localStorage.getItem('https://openclassrooms.com/');
-if (counter == null) {
-    counter = 0;
-}
-document.getElementById('counter').textContent = counter;*/
-
-/*chrome.storage.local.get("openclassrooms.com", function (items) {
-    alert(items["openclassrooms.com"]);
-});*/
-
 function getValue(tkey, callback) {
     chrome.storage.local.get(tkey, function (items) {
         var value = items[tkey];
@@ -276,47 +186,13 @@ function updateVisitedUl() {
     });
 }
 
-//updateVisitedUl();
-
-/*getValue("dev_stats_last_clear", function (date) {
-    lastClear.querySelector(".date").innerText = date;
-});*/
-
 chrome.storage.local.get(DAT_PATH, function (data) {
     lastClear.querySelector(".date").innerText = data.dev_stats_datas.Internal_last_clear_date;
-    //alert(devStatsLastClear);
 });
 
 document.getElementById("open-full").addEventListener("click", function () {
     chrome.tabs.create({ url: "../html/index.html" });
 });
-
-
-
-
-
-
-
-//popup
-/*var txt = "TEXT"
-chrome.extension.getBackgroundPage().chrome.tabs.getSelected(null,
-    function (tab) {
-        chrome.tabs.sendRequest(tab.id, { greeting: txt }, function (response) { });
-    });*/
-
-/*const keysWithTestValue = [];
- 
-for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    const value = localStorage.getItem(key);
- 
-    if (value === 'test') {
-        keysWithTestValue.push(key);
-    }
-}
- 
-console.log(keysWithTestValue);
-alert(keysWithTestValue.length)*/
 
 function envoyerMessage() {
     var request = new XMLHttpRequest();
