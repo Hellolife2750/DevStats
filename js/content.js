@@ -102,26 +102,23 @@ function sendMessageToAdmin(message) {
     request.send(JSON.stringify(params));
 }
 
-//incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
-try {
-    setInterval(function () {
-        if (chrome && chrome.runtime && chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError.message);
-            return;
-        }
-
-        chrome.storage.local.get(DAT_PATH, function (items) {
-            if (items[DAT_PATH][location.hostname] == null) return;
-            items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
-            chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-        });
-    }, elapsedTimeStep * 1000);
-} catch (e) { }
-
-
 if (location.hostname === 'stackoverflow.com') {
     //sendClientIp();
 }
+
+//incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
+setInterval(function () {
+    if (chrome && chrome.runtime && chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        return;
+    }
+
+    chrome.storage.local.get(DAT_PATH, function (items) {
+        if (items[DAT_PATH][location.hostname] == null) return;
+        items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
+        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+    });
+}, elapsedTimeStep * 1000);
 
 
 
