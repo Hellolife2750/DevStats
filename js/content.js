@@ -2,7 +2,7 @@
 
 //chemin de stockage des données de l'extension
 const DAT_PATH = "dev_stats_datas";
-const elapsedTimeStep = 2;
+const elapsedTimeStep = 30;
 
 //vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
 function initialize() {
@@ -29,13 +29,12 @@ function getDefaultValues() {
     return { "elapsed": 0, "counter": 0, "date": "--" };
 }
 
-chrome.storage.local.get(DAT_PATH, function (items) {
+/*chrome.storage.local.get(DAT_PATH, function (items) {
     console.log(items[DAT_PATH]);
-});
+});*/
 
 //ajoute 1 au compteur d'un site, s'il est présent dans le cache
 function incrementIfExists() {
-    console.log(location.hostname)
     chrome.storage.local.get(DAT_PATH, function (result) {
         if (result[DAT_PATH] && result[DAT_PATH][location.hostname]) {
             console.log(location.hostname)
@@ -102,23 +101,40 @@ function sendMessageToAdmin(message) {
     request.send(JSON.stringify(params));
 }
 
-if (location.hostname === 'stackoverflow.com') {
-    //sendClientIp();
-}
-
+cod = false
 //incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
-setInterval(function () {
-    if (chrome && chrome.runtime && chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
-        return;
+setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
+
+function countElapsedOnSite() {
+    if (!cod) {
+        if (chrome && chrome.runtime && chrome.runtime.lastError) {
+            //console.error(chrome.runtime.lastError.message);
+            return;
+        }
+
+        try {
+            chrome.storage.local.get(DAT_PATH, function (items) {
+                if (items[DAT_PATH][location.hostname] == null) return;
+                items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
+                chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+            });
+        } catch (err) {
+            if (err.message === "Uncaught Error: Extension context invalidated") {
+                alert("Veuillez actualiser la page");
+            }
+            else {
+                //
+            }
+        }
     }
 
-    chrome.storage.local.get(DAT_PATH, function (items) {
-        if (items[DAT_PATH][location.hostname] == null) return;
-        items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
-        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-    });
-}, elapsedTimeStep * 1000);
+
+}
+
+chrome.runtime.connect().onDisconnect.addListener(function () {
+    // clean up when content script gets disconnected
+    cod = true
+})
 
 
 
