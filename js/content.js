@@ -101,14 +101,12 @@ function sendMessageToAdmin(message) {
     request.send(JSON.stringify(params));
 }
 
-//cod = false
 //incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
-let timer = setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
+let elapsedTimer = setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
 
 function countElapsedOnSite() {
     if (chrome && chrome.runtime && chrome.runtime.lastError) {
-        //console.error(chrome.runtime.lastError.message);
-        clearInterval(timer);
+        clearInterval(elapsedTimer);
         return;
     }
 
@@ -119,20 +117,13 @@ function countElapsedOnSite() {
             chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
         });
     } else {
-        clearInterval(timer);
+        clearInterval(elapsedTimer);
     }
 }
 
 window.addEventListener('beforeunload', function () {
-    clearInterval(timer);
-    //chrome.runtime.sendMessage({ stopTimer: true });
+    clearInterval(elapsedTimer);
 });
-
-
-/*chrome.runtime.connect().onDisconnect.addListener(function () {
-    // clean up when content script gets disconnected
-    cod = true
-})*/
 
 
 
