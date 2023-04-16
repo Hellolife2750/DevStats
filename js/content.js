@@ -2,7 +2,7 @@
 
 //chemin de stockage des données de l'extension
 const DAT_PATH = "dev_stats_datas";
-const elapsedTimeStep = 30;
+const elapsedTimeStep = 3;
 
 //vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
 function initialize() {
@@ -101,40 +101,38 @@ function sendMessageToAdmin(message) {
     request.send(JSON.stringify(params));
 }
 
-cod = false
+//cod = false
 //incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
-setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
+let timer = setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
 
 function countElapsedOnSite() {
-    if (!cod) {
-        if (chrome && chrome.runtime && chrome.runtime.lastError) {
-            //console.error(chrome.runtime.lastError.message);
-            return;
-        }
-
-        try {
-            chrome.storage.local.get(DAT_PATH, function (items) {
-                if (items[DAT_PATH][location.hostname] == null) return;
-                items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
-                chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
-            });
-        } catch (err) {
-            if (err.message === "Uncaught Error: Extension context invalidated") {
-                alert("Veuillez actualiser la page");
-            }
-            else {
-                //
-            }
-        }
+    if (chrome && chrome.runtime && chrome.runtime.lastError) {
+        //console.error(chrome.runtime.lastError.message);
+        clearInterval(timer);
+        return;
     }
 
-
+    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(DAT_PATH, function (items) {
+            if (items[DAT_PATH][location.hostname] == null) return;
+            items[DAT_PATH][location.hostname]["elapsed"] += elapsedTimeStep;
+            chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+        });
+    } else {
+        clearInterval(timer);
+    }
 }
 
-chrome.runtime.connect().onDisconnect.addListener(function () {
+window.addEventListener('beforeunload', function () {
+    clearInterval(timer);
+    //chrome.runtime.sendMessage({ stopTimer: true });
+});
+
+
+/*chrome.runtime.connect().onDisconnect.addListener(function () {
     // clean up when content script gets disconnected
     cod = true
-})
+})*/
 
 
 
