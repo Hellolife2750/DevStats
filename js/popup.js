@@ -106,22 +106,27 @@ function updatePopup() {
         chrome.storage.local.get(DAT_PATH, function (result) {
             const data = result[DAT_PATH];
             const visitedUl = document.getElementById("visited-ul");
+            let topLength; (keys.length < 3) ? topLength = keys.length : topLength = 3;
             for (let i = 0; i < 3; i++) { //keys.length
-                const key = keys[i];
-                const urlData = data[key];
-                const counter = urlData.counter;
-                const valueSpan = visitedUl.children[i].querySelector('.value');
-                valueSpan.textContent = counter;
+                if (i >= topLength) {
+                    visitedUl.children[i].style.display = "none";
+                } else {
+                    const key = keys[i];
+                    const urlData = data[key];
+                    const counter = urlData.counter;
+                    const valueSpan = visitedUl.children[i].querySelector('.value');
+                    valueSpan.textContent = counter;
 
-                // update the image of the site
-                const iconImg = visitedUl.children[i].querySelector('.tiny-icon');
-                var iconUrl = "../res/icons/" + key + ".png";
-                checkFileExists(iconUrl).then(newUrl => {
-                    iconImg.src = newUrl;
-                });
+                    // update the image of the site
+                    const iconImg = visitedUl.children[i].querySelector('.tiny-icon');
+                    var iconUrl = "../res/icons/" + key + ".png";
+                    checkFileExists(iconUrl).then(newUrl => {
+                        iconImg.src = newUrl;
+                    });
 
-                //update title on mouseover
-                iconImg.title = key;
+                    //update title on mouseover
+                    iconImg.title = key;
+                }
             }
         });
     });
