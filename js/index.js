@@ -55,21 +55,6 @@ siteInput.addEventListener("keyup", () => {
     searchSites(siteInput);
 })
 
-/*siteInput.addEventListener('focus', () => {
-    siteListContainer.style.display = "block";
-    //siteListContainer.style.opacity = "1"
-})*/
-
-/*siteInput.addEventListener('blur', async function () {
-    await sleep(250)
-    siteListContainer.style.opacity = "1";
-    setTimeout(() => {
-        siteListContainer.style.opacity = "0";
-    }, 250);
-    //siteListContainer.style.display = "none";
-    //siteListContainer.style.opacity = "0"
-})*/
-
 //enlever les suggestions quand on clique en dehors
 document.addEventListener('mouseup', function (event) {
     if ((!siteListContainer.contains(event.target) && siteListContainer.style.display == "block")) {
@@ -77,7 +62,7 @@ document.addEventListener('mouseup', function (event) {
     }
 });
 
-//appelé dans une fonciton asynchrone, permet de la mettre en pause
+//appelée dans une fonciton asynchrone, permet de la mettre en pause
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
