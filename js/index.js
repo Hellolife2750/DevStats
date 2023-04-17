@@ -29,6 +29,7 @@ function searchSites(input) {
         siteDiv.onclick = () => {
             input.value = site;
             siteListDiv.innerHTML = '';
+            siteListContainer.style.display = "none";
         };
         siteListDiv.appendChild(siteDiv);
     });
@@ -59,15 +60,22 @@ siteInput.addEventListener("keyup", () => {
     //siteListContainer.style.opacity = "1"
 })*/
 
-siteInput.addEventListener('blur', async function () {
+/*siteInput.addEventListener('blur', async function () {
     await sleep(250)
-    /*siteListContainer.style.opacity = "1";
+    siteListContainer.style.opacity = "1";
     setTimeout(() => {
         siteListContainer.style.opacity = "0";
-    }, 250);*/
-    siteListContainer.style.display = "none";
+    }, 250);
+    //siteListContainer.style.display = "none";
     //siteListContainer.style.opacity = "0"
-})
+})*/
+
+//enlever les suggestions quand on clique en dehors
+document.addEventListener('mouseup', function (event) {
+    if ((!siteListContainer.contains(event.target) && siteListContainer.style.display == "block")) {
+        siteListContainer.style.display = "none";
+    }
+});
 
 //appelé dans une fonciton asynchrone, permet de la mettre en pause
 function sleep(ms) {
