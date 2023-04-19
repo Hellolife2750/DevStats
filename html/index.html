@@ -24,6 +24,9 @@
     <!-- <script type="module" src="/js/chart.min.js"></script> -->
     <!-- <script type="module" src="chrome-extension://agfhopkdlkmhhabbeecfehiagiajiean/js/chart.min.js"></script> -->
 
+    <!-- importation de chart.js pour les graphiques -->
+    <script src="../js/chart.js"></script>
+
 
     <title>DevStats - Tableau de Bord</title>
 </head>
@@ -60,6 +63,9 @@
 
         <section id="graph-section">
             <h2 class="section-title">Graphe</h2>
+
+            <canvas id="myChart"></canvas>
+
             <button class="classic-button">Download</button>
         </section>
 
@@ -101,8 +107,6 @@
 
     </main>
 
-    <!-- faire les graphiques -->
-    <!-- <script type="module" src="../js/chart.min.js"></script> -->
     <script src="../js/index.js"></script>
 
 </body>

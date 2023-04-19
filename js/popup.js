@@ -196,7 +196,7 @@ chrome.storage.local.get(DAT_PATH, function (data) {
 });
 
 document.getElementById("open-full").addEventListener("click", function () {
-    chrome.tabs.create({ url: "../html/test.html" });
+    chrome.tabs.create({ url: "../html/index.html" });
 });
 
 function envoyerMessage() {
