@@ -39,5 +39,8 @@
                 "https://openclassrooms.com/*"
             ]
         }
-    ]
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'; script-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/chart.js;"
+    }
 }
