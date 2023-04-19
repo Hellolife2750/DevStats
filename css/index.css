@@ -255,6 +255,25 @@ main > section {
   margin-top: 1rem;
 }
 
+#graph-section {
+  width: 100%;
+}
+
+#graphics-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+#graphics-container .chart-container {
+  width: 30%;
+}
+
+#graphics-container > canvas {
+  width: 100%;
+}
+
 /*taille tablette*/
 @media (max-width: 1000px) {
   main {

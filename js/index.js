@@ -173,6 +173,7 @@ function getOrderedKeys() {
 }
 
 var csvString = `Website,Visits,Last visit,Elapsed time`;
+var datasTab = {};
 
 //génère la tableau des données utilisateur
 function generateTable() {
@@ -201,7 +202,10 @@ function generateTable() {
                 tableBody.insertAdjacentHTML('beforeend', tableCode);
 
                 csvString += `\n${key},${urlData.counter},${urlData.date},${urlData.elapsed}`;
+                datasTab[key] = { 'counter': urlData.counter, 'elapsed': urlData.elapsed };
             }
+            console.log(datasTab)
+            createGraphics();
             setupRemoveSiteBtns();
         });
     });
@@ -368,40 +372,171 @@ function removeSite(rmBtn) {
 }
 
 /*graphiques chart.js*/
+const chart1 = document.getElementById('chart1').getContext('2d');
+const chart2 = document.getElementById('chart2').getContext('2d');
 
-// Données à afficher
-var data = {
-    labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
-    datasets: [
-        {
-            label: "Ventes",
-            backgroundColor: "rgba(255,99,132,0.2)",
-            borderColor: "rgba(255,99,132,1)",
-            borderWidth: 1,
-            hoverBackgroundColor: "rgba(255,99,132,0.4)",
-            hoverBorderColor: "rgba(255,99,132,1)",
-            data: [12, 19, 3, 5, 2, 3],
+function createGraphics() {
+    // Définition des données du graphique
+    const labels = Object.keys(datasTab); // Les noms des sites web
+    var data = Object.values(datasTab).map((site) => site.counter); // Les nombres de visites
+    const backgroundColors = [
+        '#FF6384',
+        '#36A2EB',
+        '#FFCE56',
+        '#8B008B',
+        '#00FF7F',
+        '#D2691E',
+        '#9400D3',
+    ]; // Les couleurs pour chaque secteur du diagramme
+
+    // Création du graphique
+    const theChart1 = new Chart(chart1, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors,
+            }]
         },
-    ],
-};
-
-// Options du graphique
-var options = {
-    scales: {
-        yAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Number of visits for each website'
+                }
+            },
+            /*legend: {
+                display: false,
+                position: 'right',
+                labels: {
+                    fontSize: 14,
+                    fontColor: 'black',
+                },
+            },*/
+            tooltips: {
+                callbacks: {
+                    label: (tooltipItem, data) => {
+                        const label = data.labels[tooltipItem.index];
+                        const value = data.datasets[0].data[tooltipItem.index];
+                        return `${label}: ${value} (${((value / data.datasets[0]._meta[0].total) * 100).toFixed(2)}%)`;
+                    },
                 },
             },
-        ],
-    },
-};
+        },
+    });
 
-// Création du graphique
-var ctx = document.getElementById("myChart").getContext("2d");
-var myChart = new Chart(ctx, {
-    type: "bar",
-    data: data,
-    options: options,
-});
+    // Définition des données du graphique
+    const data2 = Object.values(datasTab).map((site) => site.elapsed); // Les nombres de visites
+
+    const labelTooltip2 = (tooltipItem) => {
+        return `${formatSeconds(tooltipItem.parsed)}`;
+    }
+    // Création du graphique
+    const theChart2 = new Chart(chart2, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data2,
+                backgroundColor: backgroundColors,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Time elapsed for each website'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: labelTooltip2,/*(tooltipItem, data2) => {
+                            console.log(data2)
+                            const label = data2.labels[tooltipItem.index];
+                            const value = data2.datasets[0].data2[tooltipItem.index];
+                            const formattedValue = formatSeconds(value);
+                            return `${label}: ${formattedValue}`;
+                        },*/
+                    },
+                },
+            },
+            /*legend: {
+                display: false,
+                position: 'right',
+                labels: {
+                    fontSize: 14,
+                    fontColor: 'black',
+                },
+            },*/
+            /*tooltips: {
+                callbacks: {
+                    label: (tooltipItem, data) => {
+                        const label = data.labels[tooltipItem.index];
+                        const value = data.datasets[0].data[tooltipItem.index];
+                        const formattedValue = formatSeconds(value);
+                        //return `${label}: ${value} (${((value / data.datasets[0]._meta[0].total) * 100).toFixed(2)}%)`;
+                    },
+                },
+            },*/
+        },
+    });
+
+
+
+    /*const dataString = csvString;
+    const dataRows = dataString.split('\n').slice(1); // ignore la première ligne contenant les titres
+    const websites = dataRows.map(row => row.split(',')[0]);
+    const visits = dataRows.map(row => parseInt(row.split(',')[1]));
+    const totalVisits = visits.reduce((acc, curr) => acc + curr, 0);
+    const percentages = visits.map(visit => visit / totalVisits * 100);
+
+    // Créer le graphique circulaire
+    const ctx = document.getElementById('chart1').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: websites,
+            datasets: [{
+                label: 'Visits',
+                data: percentages,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Percentage of visits for each website'
+                }
+            }
+        }
+    });*/
+}
