@@ -227,6 +227,17 @@ main > section {
   border: 0;
 }
 
+.tiny-icon {
+  width: 20px;
+  height: 20px;
+}
+
+#stats-table .flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .remove-site-btn {
   border: 2px solid black;
   border-radius: 3px;

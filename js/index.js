@@ -182,17 +182,22 @@ function generateTable() {
             const data = result[DAT_PATH];
             const tableBody = document.querySelector("#stats-table tbody");
             tableBody.innerHTML = "";
+            var iconPath;
             for (let i = 0; i < keys.length; i++) {
                 const key = keys[i];
                 const urlData = data[key];
                 //const counter = urlData.counter;
                 //const valueSpan = visitedUl.children[i].querySelector('.value');
                 //valueSpan.textContent = counter;
-
+                disponibleSites.includes(key) ? iconPath = key : iconPath = "unknown";
                 const tableCode = `
                 <tr>
                     <td><div class="remove-site-btn">-</div></td>
-                    <td>${key}</td>
+                    <td>
+                        <div class="flex-container">
+                            <img src="../res/icons/${iconPath}.png" class="tiny-icon" alt="logo du site">${key}
+                        </div>
+                    </td>
                     <td>${urlData.counter}</td>
                     <td>${urlData.date}</td>
                     <td>${formatSeconds(urlData.elapsed)}</td>
