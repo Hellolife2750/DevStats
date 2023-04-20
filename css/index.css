@@ -228,6 +228,10 @@ main > section {
   border: 0;
 }
 
+#stats-table tr:last-of-type {
+  font-weight: bold;
+}
+
 .tiny-icon {
   width: 20px;
   height: 20px;

@@ -172,6 +172,8 @@ function getOrderedKeys() {
     });
 }
 
+const tableBody = document.querySelector("#stats-table tbody");
+
 var csvString = `Website,Visits,Last visit,Elapsed time`;
 var datasTab = {};
 var allSitesTd;
@@ -181,9 +183,13 @@ function generateTable() {
     getOrderedKeys().then(keys => {
         chrome.storage.local.get(DAT_PATH, function (result) {
             const data = result[DAT_PATH];
-            const tableBody = document.querySelector("#stats-table tbody");
             tableBody.innerHTML = "";
-            var iconPath;
+            let iconPath;
+
+            let nbVisitsTotal = 0;
+            let dateTotal = "01/01/1970";
+            let elapsedSecondsTotal = 0;
+
             for (let i = 0; i < keys.length; i++) {
                 const key = keys[i];
                 const urlData = data[key];
@@ -209,16 +215,51 @@ function generateTable() {
 
                 csvString += `\n${key},${urlData.counter},${urlData.date},${urlData.elapsed}`;
                 datasTab[key] = { 'counter': urlData.counter, 'elapsed': urlData.elapsed };
+
+                nbVisitsTotal += urlData.counter;
+                elapsedSecondsTotal += urlData.elapsed;
+                dateTotal = getMostRecentDate(dateTotal, urlData.date);
             }
             console.log(datasTab)
             allSitesTd = document.querySelectorAll('#stats-table tbody tr td:nth-child(2)')
-
             setupSitesTooltips();
             createGraphics();
             setupRemoveSiteBtns();
+
+            createTotalLine(keys.length, nbVisitsTotal, dateTotal, elapsedSecondsTotal);
         });
     });
 }
+
+//crée la dernière ligne du tableau indiquant les totaux
+function createTotalLine(nbSitesTotal, nbVisitsTotal, dateTotal, elapsedSecondsTotal) {
+    let lineCode = `
+    <tr>
+        <td></td>
+        <td>${nbSitesTotal}</td>
+        <td>${nbVisitsTotal}</td>
+        <td>${dateTotal}</td>
+        <td>${formatSeconds(elapsedSecondsTotal)}</td>
+    </tr>
+    `;
+    tableBody.insertAdjacentHTML('beforeend', lineCode);
+}
+
+/*Renvoie la date la plus récente des 2 qui lui sont passées en paramètres*/
+function getMostRecentDate(date1, date2) {
+    if (date2 == "--") return date1;
+    const [jour1, mois1, annee1] = date1.split('/').map(Number);
+    const [jour2, mois2, annee2] = date2.split('/').map(Number);
+    const date1Obj = new Date(annee1, mois1 - 1, jour1);
+    const date2Obj = new Date(annee2, mois2 - 1, jour2);
+
+    if (date1Obj > date2Obj) {
+        return date1;
+    } else {
+        return date2;
+    }
+}
+
 
 //transforme des secondes au format hh:mm:ss
 function formatSeconds(totalSeconds) {
