@@ -219,6 +219,7 @@ main > section {
   padding: 1rem;
   font-size: 1rem;
   text-align: center;
+  cursor: default;
 }
 
 #stats-table th:first-of-type,
@@ -283,6 +284,24 @@ main > section {
 
 #graphics-container > canvas {
   width: 100%;
+}
+
+/*url tooltip*/
+#site-tooltip {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 1em;
+  position: fixed;
+  text-align: justify;
+  line-height: 1.2rem;
+  padding: 0.5rem;
+  border-radius: 0 0.5rem 0.5rem 0.5rem;
+  z-index: 11;
+  font-weight: bold;
+  max-width: 25vw;
+  display: none;
+
+  /*transition: all 0.1s ease-in-out;*/
 }
 
 /*taille tablette*/

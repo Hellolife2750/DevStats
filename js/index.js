@@ -174,6 +174,7 @@ function getOrderedKeys() {
 
 var csvString = `Website,Visits,Last visit,Elapsed time`;
 var datasTab = {};
+var allSitesTd;
 
 //génère la tableau des données utilisateur
 function generateTable() {
@@ -193,7 +194,7 @@ function generateTable() {
                 const tableCode = `
                 <tr>
                     <td><div class="remove-site-btn">-</div></td>
-                    <td>
+                    <td data-tooltip-content="test">
                         <div class="flex-container">
                             <img src="../res/icons/${iconPath}.png" class="tiny-icon" alt="logo du site">${key}
                         </div>
@@ -210,6 +211,9 @@ function generateTable() {
                 datasTab[key] = { 'counter': urlData.counter, 'elapsed': urlData.elapsed };
             }
             console.log(datasTab)
+            allSitesTd = document.querySelectorAll('#stats-table tbody tr td:nth-child(2)')
+
+            setupSitesTooltips();
             createGraphics();
             setupRemoveSiteBtns();
         });
@@ -544,4 +548,28 @@ function createGraphics() {
             }
         }
     });*/
+}
+
+/*tooltip survol sites*/
+const siteTooltip = document.getElementById('site-tooltip');
+
+document.body.addEventListener("mousemove", function (event) {
+    moveTooltip(event);
+});
+
+function moveTooltip(e) {
+    siteTooltip.style.top = `${e.clientY + 15}px`;
+    siteTooltip.style.left = `${e.clientX + 15}px`;
+}
+
+function setupSitesTooltips() {
+    allSitesTd.forEach(siteTd => {
+        siteTd.addEventListener('mouseenter', () => {
+            siteTooltip.innerHTML = siteTd.getAttribute("data-tooltip-content");
+            siteTooltip.style.display = 'block';
+        });
+        siteTd.addEventListener('mouseleave', () => {
+            siteTooltip.style.display = 'none';
+        });
+    });
 }
