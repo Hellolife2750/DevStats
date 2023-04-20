@@ -94,7 +94,7 @@ addSiteBtn.addEventListener("click", () => {
 
 //valeurs par défaut à l'ajout d'une nouvelle clé (url) dans le cache
 function getDefaultValues() {
-    return { "elapsed": 0, "counter": 0, "date": "--" };
+    return { "elapsed": 0, "counter": 0, "date": "--", "resetDate": getDate() };
 }
 
 chrome.storage.local.get(DAT_PATH, function (data) {
@@ -194,7 +194,7 @@ function generateTable() {
                 const tableCode = `
                 <tr>
                     <td><div class="remove-site-btn">-</div></td>
-                    <td data-tooltip-content="test">
+                    <td data-tooltip-content="Added on ${urlData.resetDate}">
                         <div class="flex-container">
                             <img src="../res/icons/${iconPath}.png" class="tiny-icon" alt="logo du site">${key}
                         </div>
