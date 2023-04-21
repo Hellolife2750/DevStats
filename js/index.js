@@ -83,6 +83,7 @@ addSiteBtn.addEventListener("click", () => {
                 chrome.storage.local.set({ [DAT_PATH]: data[DAT_PATH] });
                 input.value = '';
                 appearPopup("added", newValue);
+                refreshPage();
             } else {
                 appearPopup("already-exist", newValue);
             }
@@ -338,9 +339,10 @@ function resetData() {
             devStatsData[key] = getDefaultValues();
         }
         devStatsData["Internal_last_clear_date"] = getDate();
-        chrome.storage.local.set({ [DAT_PATH]: devStatsData }, function () {
+        chrome.storage.local.set({ [DAT_PATH]: devStatsData }); /*, function () {
             location.reload();
-        });
+        }*/
+        refreshPage();
     });
 }
 
@@ -369,7 +371,8 @@ function createDatas() {
     });
     data["Internal_last_clear_date"] = getDate();
     chrome.storage.local.set({ [DAT_PATH]: data }, function () {
-        location.reload();
+        //location.reload();
+        refreshPage();
     });
 }
 
@@ -416,7 +419,8 @@ function removeSite(rmBtn) {
 
     chrome.storage.local.get(DAT_PATH, function (items) {
         delete items[DAT_PATH][url];
-        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] }, location.reload());
+        chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
+        refreshPage();
     });
 
 }
@@ -440,7 +444,12 @@ function createGraphics() {
     ]; // Les couleurs pour chaque secteur du diagramme
 
     // Création du graphique
-    const theChart1 = new Chart(chart1, {
+
+    if (chart1.theChart1) {
+        // Destroy the previous chart instance
+        chart1.theChart1.destroy();
+    }
+    chart1.theChart1 = new Chart(chart1, {
         type: 'pie',
         data: {
             labels: labels,
@@ -487,7 +496,11 @@ function createGraphics() {
         return `${formatSeconds(tooltipItem.parsed)}`;
     }
     // Création du graphique
-    const theChart2 = new Chart(chart2, {
+    if (chart2.theChart2) {
+        // Destroy the previous chart instance
+        chart2.theChart2.destroy();
+    }
+    chart2.theChart2 = new Chart(chart2, {
         type: 'pie',
         data: {
             labels: labels,
@@ -613,4 +626,10 @@ function setupSitesTooltips() {
             siteTooltip.style.display = 'none';
         });
     });
+}
+
+//permet de rafraichir la page sans faire un loc.reload()
+function refreshPage() {
+    generateTable();
+    setupRemoveSiteBtns();
 }
