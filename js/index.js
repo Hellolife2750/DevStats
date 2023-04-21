@@ -229,6 +229,7 @@ function generateTable() {
             setupSitesTooltips();
             createGraphics();
             setupRemoveSiteBtns();
+            updateLastReset();
 
             createTotalLine(keys.length, nbVisitsTotal, dateTotal, elapsedSecondsTotal);
         });
