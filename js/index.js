@@ -200,7 +200,10 @@ function generateTable() {
                 disponibleSites.includes(key) ? iconPath = key : iconPath = "unknown";
                 const tableCode = `
                 <tr>
-                    <td><div class="remove-site-btn">-</div></td>
+                    <td>
+                        <div class="reset-site-btn interact-site-btn">O</div>
+                        <div class="remove-site-btn interact-site-btn">-</div>
+                    </td>
                     <td data-tooltip-content="Added on ${urlData.resetDate}">
                         <div class="flex-container">
                             <img src="../res/icons/${iconPath}.png" class="tiny-icon" alt="logo du site">${key}
@@ -403,10 +406,17 @@ function updateLastReset() {
 /*retirer un site un par un*/
 async function setupRemoveSiteBtns() {
     const removeSiteBtns = document.querySelectorAll('.remove-site-btn');
+    const resetSiteBtns = document.querySelectorAll('.reset-site-btn');
 
     removeSiteBtns.forEach(rmBtn => {
         rmBtn.addEventListener("click", () => {
             removeSite(rmBtn);
+        });
+    });
+
+    resetSiteBtns.forEach(rsBtn => {
+        rsBtn.addEventListener("click", () => {
+            resetSite(rsBtn);
         });
     });
 }
@@ -415,14 +425,24 @@ setupRemoveSiteBtns();
 
 function removeSite(rmBtn) {
     const url = rmBtn.parentNode.parentNode.children[1].innerText;
-    console.log(url)
+    //console.log(url)
 
     chrome.storage.local.get(DAT_PATH, function (items) {
         delete items[DAT_PATH][url];
         chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
         refreshPage();
     });
+}
 
+function resetSite(rsBtn) {
+    const url = rsBtn.parentNode.parentNode.children[1].innerText;
+
+    chrome.storage.local.get(DAT_PATH, function (result) {
+        const devStatsData = result[DAT_PATH];
+        devStatsData[url] = getDefaultValues();
+        chrome.storage.local.set({ [DAT_PATH]: devStatsData });
+        refreshPage();
+    });
 }
 
 /*graphiques chart.js*/

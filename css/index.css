@@ -224,7 +224,7 @@ main > section {
 
 #stats-table th:first-of-type,
 #stats-table td:first-of-type {
-  width: 5%;
+  width: 7%;
   border: 0;
 }
 
@@ -243,7 +243,16 @@ main > section {
   align-items: center;
 }
 
-.remove-site-btn {
+#stats-table tbody tr td:first-of-type {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.interact-site-btn {
   border: 2px solid black;
   border-radius: 3px;
   font-weight: bold;
@@ -257,13 +266,22 @@ main > section {
   transition: all 0.2s ease-in-out;
 }
 
-.remove-site-btn:hover {
+.interact-site-btn:hover {
   color: #2b81e9;
   border-color: #2b81e9;
   border-radius: 0;
   scale: 1.3;
 
   transition: all 0.2s ease-in-out;
+}
+
+.remove-site-btn:hover {
+  color: rgb(221, 21, 21);
+  border-color: rgb(221, 21, 21);
+}
+
+.reset-site-btn {
+  font-size: 0.7rem;
 }
 
 #last-reset {
