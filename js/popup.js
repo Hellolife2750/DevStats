@@ -69,7 +69,7 @@ function createDatas() {
 
 //valeurs par défaut à l'ajout d'une nouvelle clé (url) dans le cache
 function getDefaultValues() {
-    return { "elapsed": 0, "counter": 0, "date": "--" };
+    return { "elapsed": 0, "counter": 0, "date": "--", "resetDate": getDate() };
 }
 
 //détruit la variable de stockage de l'application (hard reset)
