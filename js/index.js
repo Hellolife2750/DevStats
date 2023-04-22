@@ -116,22 +116,34 @@ const addedPopup = document.getElementById("added-popup");
 
 //Fait apparaitre le message en haut du site quand una ction importante est effectuée
 function appearPopup(type, url) {
+    const messageParagraph = addedPopup.querySelector('p');
+    const redRgb = "rgb(221, 21, 21)";
+    const greenRgb = "rgb(38, 180, 133)";
+
     switch (type) {
         case "already-exist":
             addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
-            addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was already in the list.`;
+            messageParagraph.innerHTML = `Website : <span class="website-url">${url}</span> was already in the list.`;
             break;
         case "added":
             addedPopup.style.backgroundColor = "rgb(38, 180, 133)";
-            addedPopup.querySelector('p').innerHTML = `Website : <span class="website-url">${url}</span> was successfully added to the list.`;
+            messageParagraph.innerHTML = `Website : <span class="website-url">${url}</span> was successfully added to the list.`;
             break;
         case "resetAll":
-            addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
-            addedPopup.querySelector('p').innerText = "All extension data has been successfully reset.";
+            addedPopup.style.backgroundColor = greenRgb;
+            messageParagraph.innerText = "All extension data has been successfully reseted.";
             break;
         case "reset":
-            addedPopup.style.backgroundColor = "rgb(221, 21, 21)";
-            addedPopup.querySelector('p').innerText = "All counters have been successfully reset to 0.";
+            addedPopup.style.backgroundColor = greenRgb;
+            messageParagraph.innerText = "All counters have been successfully reseted to 0.";
+            break;
+        case "resetSite":
+            addedPopup.style.backgroundColor = greenRgb;
+            messageParagraph.innerHTML = `Website : <span class="website-url">${url}</span> have been reseted successfully.`;
+            break;
+        case "removeSite":
+            addedPopup.style.backgroundColor = greenRgb;
+            messageParagraph.innerHTML = `Website : <span class="website-url">${url}</span> have been removed from the list successfully.`;
             break;
         default:
             return;
@@ -330,10 +342,12 @@ const resetButton = document.getElementById('reset-button');
 
 resetAllButton.addEventListener('click', () => {
     resetAllData();
+    appearPopup("resetAll", "none");
 });
 
 resetButton.addEventListener('click', () => {
     resetData();
+    appearPopup("reset", "none");
 });
 
 function resetData() {
@@ -432,6 +446,7 @@ function removeSite(rmBtn) {
         delete items[DAT_PATH][url];
         chrome.storage.local.set({ [DAT_PATH]: items[DAT_PATH] });
         refreshPage();
+        appearPopup("removeSite", url);
     });
 }
 
@@ -443,6 +458,7 @@ function resetSite(rsBtn) {
         devStatsData[url] = getDefaultValues();
         chrome.storage.local.set({ [DAT_PATH]: devStatsData });
         refreshPage();
+        appearPopup("resetSite", url);
     });
 }
 
