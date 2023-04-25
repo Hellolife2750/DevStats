@@ -496,10 +496,14 @@ function createGraphics() {
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
+                    position: 'right',
                 },
                 title: {
                     display: true,
@@ -547,10 +551,14 @@ function createGraphics() {
             }]
         },
         options: {
+            animation: {
+                duration: 0
+            },
             responsive: true,
             plugins: {
                 legend: {
                     display: false,
+                    position: 'right',
                 },
                 title: {
                     display: true,
@@ -669,4 +677,83 @@ function setupSitesTooltips() {
 function refreshPage() {
     generateTable();
     setupRemoveSiteBtns();
+}
+
+//télécharger les graphiques
+const dlGraphicsBtn = document.getElementById("dl-graphics-btn");
+const allCanvas = document.querySelectorAll("#graphics-container canvas");
+
+dlGraphicsBtn.addEventListener('click', downloadAllGraphics);
+/*function () {
+chart1.theChart1.options.plugins.legend.display = true;
+let image = document.getElementById('chart1').toDataURL("image/jpg");
+let link = document.createElement('a');
+link.download = 'devStats-graphics.jpg';
+link.href = image;
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+});*/
+
+function changeChartsLegendVisiblity(visibility) {
+    new Promise(resolve => {
+        chart1.theChart1.options.plugins.legend.display = visibility;
+        chart1.theChart1.update();
+        chart2.theChart2.options.plugins.legend.display = visibility;
+        chart2.theChart2.update();
+        /*allCanvas[0].style.width = "500px";
+        allCanvas[0].style.height = "500px";
+        allCanvas[1].style.width = "500px";
+        allCanvas[1].style.height = "500px";
+
+        allCanvas[0].width = 500;
+        allCanvas[0].height = 500;
+
+        allCanvas[1].width = 500;
+        allCanvas[1].height = 500;*/
+        chart1.width = 1000;
+        chart1.theChart1.options.layout = { width: 50000, height: 540000 };
+
+        chart1.theChart1.update()
+        resolve();
+    });
+}
+
+async function downloadAllGraphics() {
+    await changeChartsLegendVisiblity(true);
+
+    // Crée un nouveau canvas qui contiendra toutes les images fusionnées
+    const mergedCanvas = document.createElement('canvas');
+    //mergedCanvas.width = 500;
+    //chart1.width = 1000;
+    //chart1.height = 1000;
+    console.log(allCanvas[0].style.width)
+    mergedCanvas.width = allCanvas[0].width;
+    mergedCanvas.height = Array.from(allCanvas).reduce((acc, curr) => acc + curr.height, 0);
+    const mergedContext = mergedCanvas.getContext('2d');
+
+    // Ajouter un fond blanc à l'image
+    mergedContext.fillStyle = '#ffffff';
+    mergedContext.fillRect(0, 0, mergedCanvas.width, mergedCanvas.height);
+
+    // Dessiner l'image sur le dessus du fond blanc
+    mergedContext.drawImage(mergedCanvas, 0, 0);
+
+    // Boucle à travers chaque canvas et dessine sur le canvas fusionné
+    let currentY = 0;
+    allCanvas.forEach(canvas => {
+        mergedContext.drawImage(canvas, 0, currentY);
+        currentY += canvas.height;
+    });
+
+
+
+    // Convertit le canvas fusionné en image jpg et télécharge le fichier
+    const image = mergedCanvas.toDataURL('image/png', 1.0);
+    const link = document.createElement('a');
+    link.download = 'devStats-graphics.png';
+    link.href = image;
+    link.click();
+
+    changeChartsLegendVisiblity(false);
 }
