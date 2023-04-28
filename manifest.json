@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "DevStats",
-    "version": "0.5",
+    "version": "Beta 0.9",
     "description": "Permet de générer des statistiques pour les développeurs à partir des sites visités.",
     "permissions": [
         "activeTab",
