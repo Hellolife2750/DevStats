@@ -74,9 +74,16 @@ main > section {
 }
 
 #add-site-button {
-  font-size: 0.7em;
+  /*font-size: 0.7em;*/
   margin-bottom: 0em;
   margin-top: 1em;
+}
+
+.centered {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .input-container input[type="text"] {

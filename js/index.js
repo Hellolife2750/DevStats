@@ -98,9 +98,9 @@ function getDefaultValues() {
     return { "elapsed": 0, "counter": 0, "date": "--", "resetDate": getDate() };
 }
 
-chrome.storage.local.get(DAT_PATH, function (data) {
+/*chrome.storage.local.get(DAT_PATH, function (data) {
     console.log(data);
-})
+})*/
 
 /*vérifie si un nom de domaine existe*/
 async function checkDomainExists(domain) {
@@ -236,7 +236,7 @@ function generateTable() {
                 elapsedSecondsTotal += urlData.elapsed;
                 dateTotal = getMostRecentDate(dateTotal, urlData.date);
             }
-            console.log(datasTab)
+            //console.log(datasTab)
             allSitesTd = document.querySelectorAll('#stats-table tbody tr td:nth-child(2)')
             setupSitesTooltips();
             createGraphics();
@@ -727,7 +727,7 @@ async function downloadAllGraphics() {
     //mergedCanvas.width = 500;
     //chart1.width = 1000;
     //chart1.height = 1000;
-    console.log(allCanvas[0].style.width)
+    //console.log(allCanvas[0].style.width)
     mergedCanvas.width = allCanvas[0].width;
     mergedCanvas.height = Array.from(allCanvas).reduce((acc, curr) => acc + curr.height, 0);
     const mergedContext = mergedCanvas.getContext('2d');
