@@ -75,7 +75,7 @@ function getDate() {
 }
 
 //incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
-let elapsedTimer = setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
+var elapsedTimer = setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
 
 function countElapsedOnSite() {
     if (chrome && chrome.runtime && chrome.runtime.lastError) {
