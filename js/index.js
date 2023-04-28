@@ -357,9 +357,7 @@ function resetData() {
             devStatsData[key] = getDefaultValues();
         }
         devStatsData["Internal_last_clear_date"] = getDate();
-        chrome.storage.local.set({ [DAT_PATH]: devStatsData }); /*, function () {
-            location.reload();
-        }*/
+        chrome.storage.local.set({ [DAT_PATH]: devStatsData });
         refreshPage();
     });
 }
@@ -368,7 +366,6 @@ function resetData() {
 function resetAllData() {
     removeDAT_PATH();
     initialize();
-    //location.reload();
 }
 
 //vérifie que la variable de stockage est présente dans le cache, sinon, la crée.
@@ -389,7 +386,6 @@ function createDatas() {
     });
     data["Internal_last_clear_date"] = getDate();
     chrome.storage.local.set({ [DAT_PATH]: data }, function () {
-        //location.reload();
         refreshPage();
     });
 }
@@ -440,7 +436,6 @@ setupRemoveSiteBtns();
 
 function removeSite(rmBtn) {
     const url = rmBtn.parentNode.parentNode.children[1].innerText;
-    //console.log(url)
 
     chrome.storage.local.get(DAT_PATH, function (items) {
         delete items[DAT_PATH][url];
@@ -566,87 +561,12 @@ function createGraphics() {
                 },
                 tooltip: {
                     callbacks: {
-                        label: labelTooltip2,/*(tooltipItem, data2) => {
-                            console.log(data2)
-                            const label = data2.labels[tooltipItem.index];
-                            const value = data2.datasets[0].data2[tooltipItem.index];
-                            const formattedValue = formatSeconds(value);
-                            return `${label}: ${formattedValue}`;
-                        },*/
+                        label: labelTooltip2,
                     },
                 },
             },
-            /*legend: {
-                display: false,
-                position: 'right',
-                labels: {
-                    fontSize: 14,
-                    fontColor: 'black',
-                },
-            },*/
-            /*tooltips: {
-                callbacks: {
-                    label: (tooltipItem, data) => {
-                        const label = data.labels[tooltipItem.index];
-                        const value = data.datasets[0].data[tooltipItem.index];
-                        const formattedValue = formatSeconds(value);
-                        //return `${label}: ${value} (${((value / data.datasets[0]._meta[0].total) * 100).toFixed(2)}%)`;
-                    },
-                },
-            },*/
         },
     });
-
-
-
-    /*const dataString = csvString;
-    const dataRows = dataString.split('\n').slice(1); // ignore la première ligne contenant les titres
-    const websites = dataRows.map(row => row.split(',')[0]);
-    const visits = dataRows.map(row => parseInt(row.split(',')[1]));
-    const totalVisits = visits.reduce((acc, curr) => acc + curr, 0);
-    const percentages = visits.map(visit => visit / totalVisits * 100);
-
-    // Créer le graphique circulaire
-    const ctx = document.getElementById('chart1').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: websites,
-            datasets: [{
-                label: 'Visits',
-                data: percentages,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Percentage of visits for each website'
-                }
-            }
-        }
-    });*/
 }
 
 /*tooltip survol sites*/
@@ -684,16 +604,6 @@ const dlGraphicsBtn = document.getElementById("dl-graphics-btn");
 const allCanvas = document.querySelectorAll("#graphics-container canvas");
 
 dlGraphicsBtn.addEventListener('click', downloadAllGraphics);
-/*function () {
-chart1.theChart1.options.plugins.legend.display = true;
-let image = document.getElementById('chart1').toDataURL("image/jpg");
-let link = document.createElement('a');
-link.download = 'devStats-graphics.jpg';
-link.href = image;
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-});*/
 
 function changeChartsLegendVisiblity(visibility) {
     new Promise(resolve => {
@@ -746,12 +656,10 @@ async function downloadAllGraphics() {
         currentY += canvas.height;
     });
 
-
-
     // Convertit le canvas fusionné en image jpg et télécharge le fichier
     const image = mergedCanvas.toDataURL('image/png', 1.0);
     const link = document.createElement('a');
-    link.download = 'devStats-graphics.png';
+    link.download = `devStats-graphics-${getDate()}.png`;
     link.href = image;
     link.click();
 
