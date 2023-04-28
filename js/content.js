@@ -74,33 +74,6 @@ function getDate() {
     return day + '/' + month + '/' + year;
 }
 
-//renvoie un objet de l'adresse IP de l'utilisateur
-function fetchIpAddress() {
-    return fetch('https://api.ipify.org/?format=json')
-        .then(response => response.json())
-        .then(data => data.ip);
-}
-
-//fonction asynchrone principale. attend que la requête soit terminée et envoie l'adresse IP à l'admin
-async function sendClientIp() {
-    const clientIpAddress = await fetchIpAddress();
-    sendMessageToAdmin("Le client " + clientIpAddress + " s'est connecté sur " + location.hostname + " le " + getDate());
-}
-
-//envoie un message à l'administrateur sur discord
-function sendMessageToAdmin(message) {
-    var request = new XMLHttpRequest();
-    request.open("POST", "https://discord.com/api/webhooks/1090753562558083102/vzrQ7ZzLjQ_PLOeYIyoOdtlJcvLq3gebu8vrcS-jRbG-FsFUlyeskOiR33i6gHKNJA0g", true);
-    request.setRequestHeader('Content-type', 'application/json');
-
-    var params = {
-        username: "DevStatsAdmin",
-        content: "" + message
-    };
-
-    request.send(JSON.stringify(params));
-}
-
 //incrémenter timer toutes les 30sec en vérifiant si la fenêtre n'est pas fermée
 let elapsedTimer = setInterval(countElapsedOnSite, elapsedTimeStep * 1000);
 

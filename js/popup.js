@@ -198,16 +198,3 @@ chrome.storage.local.get(DAT_PATH, function (data) {
 document.getElementById("open-full").addEventListener("click", function () {
     chrome.tabs.create({ url: "../html/index.html" });
 });
-
-function envoyerMessage() {
-    var request = new XMLHttpRequest();
-    request.open("POST", "https://discord.com/api/webhooks/1090753562558083102/vzrQ7ZzLjQ_PLOeYIyoOdtlJcvLq3gebu8vrcS-jRbG-FsFUlyeskOiR33i6gHKNJA0g", true);
-    request.setRequestHeader('Content-type', 'application/json');
-
-    var params = {
-        username: "DevStatsAdmin",
-        content: "Il a visité stackoverflow"
-    };
-
-    request.send(JSON.stringify(params));
-}
